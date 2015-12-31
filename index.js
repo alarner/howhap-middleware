@@ -16,11 +16,38 @@ module.exports = function(options) {
 		req.session._howhap = _.cloneDeep(defaults);
 
 		res.locals.error = new ErrorDisplayer(prevHowhap.errors);
-		res.locals.prev = function(type, key, defaultValue) {
-			defaultValue = defaultValue || '';
-			return prevHowhap.data[type.toLowerCase()][key] || defaultValue;
+		res.locals.prev = {
+			display: function(type, key, defaultValue) {
+				defaultValue = defaultValue || '';
+				return prevHowhap.data[type.toLowerCase()][key] || defaultValue;
+			}
 		};
 			
-		res.error = new ErrorList(req, res, options.availableErrors);
+		res.error = new ErrorList(options.availableErrors);
+		res.error.send = function(redirect) {
+			let errors = req.error.list();
+			let status = null;
+			// Get the status of the "first" error in the object
+			for(let prop in errors) {
+				status = errors[prop].status;
+				break;
+			}
+			if(status === null) {
+				return false;
+			}
+			if(req.accepts('html')) {
+				redirect = redirect || req.get('Referer');
+				req.session._howhap.errors = errors;
+				req.session._howhap.data.body = req.body;
+				req.session._howhap.data.query = req.query;
+				req.session._howhap.data.params = req.params;
+				res.redirect(redirect);
+			}
+			else {
+				res.status(status).json(errors);
+			}
+			return true;
+		};
+		next();
 	};
 };
