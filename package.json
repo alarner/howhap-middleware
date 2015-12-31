@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/alarner/howhap-middleware#readme",
   "dependencies": {
-    "howhap": "git+https://github.com/alarner/howhap.git",
+    "howhap": "^1.0.0",
     "lodash": "^3.10.1"
   },
   "devDependencies": {
