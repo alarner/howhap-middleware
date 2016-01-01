@@ -10,27 +10,37 @@ let express = require('express');
 let howhap = require('howhap-middleware');
 
 // An *optional* preset list of errors.
-let errors = {
-	DEFAULT: {
-		message: 'An unknown error occurred.',
-		status: 500
-	},
-	AUTH: {
-		INVALID_EMAIL: {
-			message: '{{ email }} is not a valid email.',
-			status: 400
+let options = {
+	errors: {
+		DEFAULT: {
+			message: 'An unknown error occurred.',
+			status: 500,
+			level: 'error'	// this property specified what
+							// level of logging is associated
+							// with this error.
 		},
-		MISSING_PASSWORD: {
-			message: 'Please enter a password.',
-			status: 400
+		AUTH: {
+			INVALID_EMAIL: {
+				message: '{{ email }} is not a valid email.',
+				status: 400
+			},
+			MISSING_PASSWORD: {
+				message: 'Please enter a password.',
+				status: 400
+			}
 		}
+	},
+	logging: {
+		// options for winston loggin go here
 	}
-}
+};
 
 let app = express();
 
-// Pass in the preset list of errors. Alternatively you can pass in nothing.
-app.use(howhap({availableErrors: errors}));
+// Pass in the preset list of errors and an array of status
+// codes that you would like to trigger an error log entry
+// on the server. Alternatively you can pass in nothing.
+app.use(howhap({availableErrors: errors, logCodes: [500]}));
 
 ```
 
