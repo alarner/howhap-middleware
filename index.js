@@ -1,8 +1,20 @@
 let ErrorList = require('./lib/error-list');
 let ErrorDisplayer = require('./lib/error-displayer');
 let _ = require('lodash');
+let winston = require('winston');
 module.exports = function(options) {
+	let defaults = {
+		availableErrors: {},
+		logging: {
+			transports: [
+				new (winston.transports.Console)()
+			],
+			level: 'info'
+		}
+	};
 	options = options || {};
+	options = _.extend(defaults, options);
+	let logger = new (winston.Logger)(options.logging);
 	return function(req, res, next) {
 		let defaults = {
 			errors: {},
@@ -25,8 +37,8 @@ module.exports = function(options) {
 				return prevHowhap.data[type.toLowerCase()][key] || defaultValue;
 			}
 		};
-			
-		res.error = new ErrorList(options.availableErrors);
+		
+		res.error = new ErrorList(options.availableErrors, logger);
 		res.error.send = function(redirect) {
 			let errors = res.error.list();
 			let status = null;

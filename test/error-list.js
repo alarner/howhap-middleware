@@ -1,5 +1,6 @@
 let expect = require('chai').expect;
 let ErrorList = require('../lib/error-list.js');
+let winston = require('winston');
 describe('ErrorList', function() {
 	describe('constructor', function() {
 		it('should not allow non-object availableErrors', function() {
@@ -13,6 +14,12 @@ describe('ErrorList', function() {
 	});
 
 	describe('add', function() {
+		let logger = new (winston.Logger)({
+			transports: [
+				new (winston.transports.Console)()
+			],
+			level: 'info'
+		});
 		let l = new ErrorList(
 			{
 				default: {
@@ -29,7 +36,8 @@ describe('ErrorList', function() {
 						status: 500
 					}
 				}
-			}
+			},
+			logger
 		);
 
 		it('should not allow errors that strings with no matching property', function() {
