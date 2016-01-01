@@ -12,6 +12,9 @@ module.exports = function(options) {
 				params: {}
 			}
 		};
+		if(!req.session) {
+			return res.status(500).end('howhap-middleare requires an express session.');
+		}
 		let prevHowhap = req.session._howhap || _.cloneDeep(defaults);
 		req.session._howhap = _.cloneDeep(defaults);
 

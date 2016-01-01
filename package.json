@@ -19,7 +19,8 @@
   "homepage": "https://github.com/alarner/howhap-middleware#readme",
   "dependencies": {
     "howhap": "^1.0.0",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "sinon": "^1.17.2"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
