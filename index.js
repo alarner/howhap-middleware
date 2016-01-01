@@ -25,7 +25,7 @@ module.exports = function(options) {
 			
 		res.error = new ErrorList(options.availableErrors);
 		res.error.send = function(redirect) {
-			let errors = req.error.list();
+			let errors = res.error.list();
 			let status = null;
 			// Get the status of the "first" error in the object
 			for(let prop in errors) {
