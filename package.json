@@ -2,10 +2,10 @@
   "name": "howhap-middleware",
   "version": "1.1.0",
   "description": "A small library for dealing with errors",
-  "main": "index.js",
+  "main": "howhap-middleware.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register",
-    "build": "npm run test && ./node_modules/browserify/bin/cmd.js ./index.js -o ./howhap-middleware.min.js -t [ babelify --presets [ es2015 ] ] -d -p [minifyify --map howhap-middleware.min.map --output howhap-middleware.min.map]"
+    "build": "npm run test && babel index.js --out-file howhap-middleware.js"
   },
   "repository": {
     "type": "git",
