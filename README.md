@@ -31,7 +31,7 @@ let options = {
 		}
 	},
 	logging: {
-		// options for winston loggin go here
+		// options for bunyan loggin go here
 	}
 };
 
