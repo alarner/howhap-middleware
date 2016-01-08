@@ -1,6 +1,6 @@
 let expect = require('chai').expect;
 let ErrorList = require('../lib/error-list.js');
-let winston = require('winston');
+let bunyan = require('bunyan');
 describe('ErrorList', function() {
 	describe('constructor', function() {
 		it('should not allow non-object availableErrors', function() {
@@ -14,11 +14,10 @@ describe('ErrorList', function() {
 	});
 
 	describe('add', function() {
-		let logger = new (winston.Logger)({
-			transports: [
-				new (winston.transports.Console)()
-			],
-			level: 'info'
+		let logger = bunyan.createLogger({
+		    name: 'howhap-middleware',
+		    stream: process.stdout,
+		    level: 'warn'
 		});
 		let l = new ErrorList(
 			{

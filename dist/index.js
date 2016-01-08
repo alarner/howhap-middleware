@@ -3,18 +3,19 @@
 var ErrorList = require('./lib/error-list');
 var ErrorDisplayer = require('./lib/error-displayer');
 var _ = require('lodash');
-var winston = require('winston');
+var bunyan = require('bunyan');
 module.exports = function (options) {
 	var defaults = {
 		availableErrors: {},
 		logging: {
-			transports: [new winston.transports.Console()],
-			level: 'info'
+			name: 'howhap-middleware',
+			stream: process.stdout,
+			level: 'warn'
 		}
 	};
 	options = options || {};
 	options = _.extend(defaults, options);
-	var logger = new winston.Logger(options.logging);
+	var logger = bunyan.createLogger(options.logging);
 	return function (req, res, next) {
 		var defaults = {
 			errors: {},

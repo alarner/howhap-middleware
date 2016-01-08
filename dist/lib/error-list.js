@@ -24,7 +24,7 @@ module.exports = function (availableErrors, logger) {
 
 		errors[key] = new Howhap(messageStatus, params);
 
-		logger.log(messageStatus.level || 'debug', messageStatus.message, messageStatus.status, params);
+		logger[messageStatus.level || 'debug'](messageStatus.message, messageStatus.status, params);
 	};
 
 	this.remove = function (key) {
