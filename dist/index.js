@@ -26,7 +26,7 @@ module.exports = function (options) {
 			}
 		};
 		if (!req.session) {
-			return res.status(500).end('howhap-middleare requires an express session.');
+			return res.status(500).end('howhap-middleware requires an express session.');
 		}
 		var prevHowhap = req.session._howhap || _.cloneDeep(defaults);
 		req.session._howhap = _.cloneDeep(defaults);

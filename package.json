@@ -20,7 +20,7 @@
   "dependencies": {
     "bunyan": "^1.5.1",
     "howhap": "^1.0.0",
-    "lodash": "^3.10.1"
+    "lodash": "^4.5.0"
   },
   "devDependencies": {
     "async": "^1.5.2",
@@ -29,7 +29,7 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-register": "^6.3.13",
     "babelify": "^7.2.0",
-    "browserify": "^12.0.1",
+    "browserify": "^13.0.0",
     "chai": "^3.4.1",
     "minifyify": "^7.1.0",
     "mocha": "^2.3.4",

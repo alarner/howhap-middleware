@@ -15,7 +15,7 @@ describe('howhap-middleware', function() {
 			res.status = sinon.stub().returns(res);
 			middlewareFunction(req, res, () => {});
 			expect(res.status.calledWith(500)).to.be.true;
-			expect(res.end.calledWith('howhap-middleare requires an express session.')).to.be.true;
+			expect(res.end.calledWith('howhap-middleware requires an express session.')).to.be.true;
 		});
 	});
 	describe('res.send', function() {
