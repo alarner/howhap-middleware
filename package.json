@@ -1,6 +1,6 @@
 {
   "name": "howhap-middleware",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A small library for dealing with errors",
   "main": "dist/index.js",
   "scripts": {
