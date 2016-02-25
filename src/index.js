@@ -1,5 +1,5 @@
-let ErrorList = require('./lib/error-list');
-let ErrorDisplayer = require('./lib/error-displayer');
+let ErrorList = require('./error-list');
+let ErrorDisplayer = require('./error-displayer');
 let _ = require('lodash');
 let bunyan = require('bunyan');
 module.exports = function(options) {

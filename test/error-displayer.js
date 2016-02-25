@@ -1,5 +1,5 @@
 let expect = require('chai').expect;
-let ErrorDisplayer = require('../lib/error-displayer.js');
+let ErrorDisplayer = require('../src/error-displayer.js');
 describe('ErrorDisplayer', function() {
 	describe('constructor', function() {
 		it('should work when nothing is passed in', function() {

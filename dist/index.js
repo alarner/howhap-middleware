@@ -1,7 +1,7 @@
 'use strict';
 
-var ErrorList = require('./lib/error-list');
-var ErrorDisplayer = require('./lib/error-displayer');
+var ErrorList = require('./error-list');
+var ErrorDisplayer = require('./error-displayer');
 var _ = require('lodash');
 var bunyan = require('bunyan');
 module.exports = function (options) {

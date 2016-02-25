@@ -1,6 +1,6 @@
 let sinon = require('sinon');
 let expect = require('chai').expect;
-let HowhapMiddleware = require('../index.js');
+let HowhapMiddleware = require('../src/index.js');
 describe('howhap-middleware', function() {
 	describe('middleware', function() {
 		let middlewareFunction = HowhapMiddleware();

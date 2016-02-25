@@ -1,5 +1,5 @@
 let expect = require('chai').expect;
-let ErrorList = require('../lib/error-list.js');
+let ErrorList = require('../src/error-list.js');
 let bunyan = require('bunyan');
 describe('ErrorList', function() {
 	describe('constructor', function() {
