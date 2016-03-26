@@ -55,5 +55,13 @@ describe('ErrorList', function() {
 			expect(() => { l.add('default'); }).to.not.throw();
 			expect(() => { l.add('form.default'); }).to.not.throw();
 		});
+
+		it('should work when adding multiple errors with different keys', function() {
+			l.add('default', 'key1');
+			expect(l.list().key1.message).to.equal('Something went wrong');
+			l.add('form.default', 'key2');
+			expect(l.list().key1.message).to.equal('Something went wrong');
+			expect(l.list().key2.message).to.equal('Default form error');
+		});
 	});
 });
