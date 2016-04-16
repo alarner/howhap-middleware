@@ -52,7 +52,7 @@ module.exports = function (options) {
 				return false;
 			}
 
-			if (req.accepts('json')) {
+			if (req.accepts('json') || !req.accepts('html')) {
 				res.status(status).json(errors);
 			} else {
 				redirect = redirect || req.get('Referer');
