@@ -22,7 +22,7 @@ describe('howhap-middleware', function() {
 		let middlewareFunction = HowhapMiddleware();
 		let req = {
 			session: {},
-			accepts: sinon.stub().returns(false)
+			accepts: sinon.stub().returns(true)
 		};
 		let res = {
 			locals: {}
@@ -43,15 +43,15 @@ describe('howhap-middleware', function() {
 				message: 'foo',
 				status: 404
 			});
-			expect(res.error.send()).to.be.true;
-			expect(req.session._howhap.errors).to.deep.equal({});
+			expect(res.error.send(), 'send() returns true').to.be.true;
+			expect(req.session._howhap.errors, 'session is cleared').to.deep.equal({});
 			expect(res.json.calledWith({
 				default: {
 					message: 'foo',
 					status: 404,
 					params: {}
 				}
-			})).to.be.true;
+			}), 'called with correct message').to.be.true;
 		});
 	});
 });

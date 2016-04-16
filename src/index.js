@@ -49,16 +49,17 @@ module.exports = function(options) {
 			if(status === null) {
 				return false;
 			}
-			if(req.accepts('html')) {
+
+			if(req.accepts('json')) {
+				res.status(status).json(errors);
+			}
+			else {
 				redirect = redirect || req.get('Referer');
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
 				req.session._howhap.data.query = req.query;
 				req.session._howhap.data.params = req.params;
 				res.redirect(redirect);
-			}
-			else {
-				res.status(status).json(errors);
 			}
 			return true;
 		};
