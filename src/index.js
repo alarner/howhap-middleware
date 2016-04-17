@@ -50,16 +50,17 @@ module.exports = function(options) {
 				return false;
 			}
 
-			if(req.accepts('json') || !req.accepts('html')) {
-				res.status(status).json(errors);
-			}
-			else {
+
+			if(req.accepts('html')) {
 				redirect = redirect || req.get('Referer');
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
 				req.session._howhap.data.query = req.query;
 				req.session._howhap.data.params = req.params;
 				res.redirect(redirect);
+			}
+			else {
+				res.status(status).json(errors);
 			}
 			return true;
 		};

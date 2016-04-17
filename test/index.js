@@ -22,7 +22,7 @@ describe('howhap-middleware', function() {
 		let middlewareFunction = HowhapMiddleware();
 		let req = {
 			session: {},
-			accepts: sinon.stub().returns(true)
+			accepts: sinon.stub().returns(false)
 		};
 		let res = {
 			locals: {}
