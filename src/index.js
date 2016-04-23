@@ -38,7 +38,7 @@ module.exports = function(options) {
 		};
 		
 		res.error = new ErrorList(options.availableErrors, logger);
-		res.error.send = function(redirect) {
+		res.error.send = function(redirect, forceJSON) {
 			let errors = res.error.list();
 			let status = null;
 			// Get the status of the "first" error in the object
@@ -50,8 +50,7 @@ module.exports = function(options) {
 				return false;
 			}
 
-
-			if(req.accepts('html')) {
+			if(!forceJSON && req.accepts('html')) {
 				redirect = redirect || req.get('Referer');
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
