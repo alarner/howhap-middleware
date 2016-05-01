@@ -20,6 +20,7 @@
   "dependencies": {
     "bunyan": "^1.8.0",
     "howhap": "^2.0.3",
+    "howhap-list": "^1.0.2",
     "lodash": "^4.11.1"
   },
   "devDependencies": {
