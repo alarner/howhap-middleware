@@ -1,7 +1,6 @@
 'use strict';
 
-var ErrorList = require('./error-list');
-var ErrorDisplayer = require('./error-displayer');
+var HowhapList = require('howhap-list');
 var _ = require('lodash');
 var bunyan = require('bunyan');
 module.exports = function (options) {
@@ -31,7 +30,7 @@ module.exports = function (options) {
 		var prevHowhap = req.session._howhap || _.cloneDeep(defaults);
 		req.session._howhap = _.cloneDeep(defaults);
 
-		res.locals.error = new ErrorDisplayer(prevHowhap.errors);
+		res.locals.error = new HowhapList(prevHowhap.errors);
 		res.locals.prev = {
 			display: function display(type, key, defaultValue) {
 				defaultValue = defaultValue || '';
@@ -39,9 +38,12 @@ module.exports = function (options) {
 			}
 		};
 
-		res.error = new ErrorList(options.availableErrors, logger);
+		res.error = new HowhapList(null, {
+			availableErrors: options.availableErrors,
+			logger: logger
+		});
 		res.error.send = function (redirect, forceJSON) {
-			var errors = res.error.list();
+			var errors = res.error.toJSON();
 			var status = null;
 			// Get the status of the "first" error in the object
 			for (var prop in errors) {
