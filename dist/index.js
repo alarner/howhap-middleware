@@ -42,7 +42,7 @@ module.exports = function (options) {
 			availableErrors: options.availableErrors,
 			logger: logger
 		});
-		res.error.send = function (redirect, forceJSON) {
+		res.error.send = function (redirect) {
 			var errors = res.error.toJSON();
 			var status = null;
 			// Get the status of the "first" error in the object
@@ -54,8 +54,7 @@ module.exports = function (options) {
 				return false;
 			}
 
-			if (!forceJSON && req.accepts('html')) {
-				redirect = redirect || req.get('Referer');
+			if (redirect) {
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
 				req.session._howhap.data.query = req.query;

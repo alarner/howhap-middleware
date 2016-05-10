@@ -19,18 +19,33 @@ describe('howhap-middleware', function() {
 		});
 	});
 	describe('res.send', function() {
-		let middlewareFunction = HowhapMiddleware();
-		let req = {
-			session: {},
-			accepts: sinon.stub().returns(false)
-		};
-		let res = {
-			locals: {}
-		};
-		res.end = sinon.stub().returns(res);
-		res.json = sinon.stub().returns(res);
-		res.status = sinon.stub().returns(res);
-		middlewareFunction(req, res, () => {});
+		let middlewareFunction = null;
+		let req = null;
+		let res = null;
+		beforeEach(function() {
+			middlewareFunction = HowhapMiddleware();
+			req = {
+				session: {},
+				accepts: sinon.stub().returns(false),
+				body: {
+					foo: 'bar'
+				},
+				query: {
+					search: 'test'
+				},
+				params: {
+					id: 7
+				}
+			};
+			res = {
+				locals: {}
+			};
+			res.end = sinon.stub().returns(res);
+			res.json = sinon.stub().returns(res);
+			res.status = sinon.stub().returns(res);
+			res.redirect = sinon.stub().returns(res);
+			middlewareFunction(req, res, () => {});
+		});
 		it('should exist', function() {
 			expect(res.error).to.not.be.undefined;
 			expect(res.error.send).to.not.be.undefined;
@@ -44,7 +59,20 @@ describe('howhap-middleware', function() {
 				status: 404
 			});
 			expect(res.error.send(), 'send() returns true').to.be.true;
+		});
+		it('should not set the session when sending json', function() {
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
 			expect(req.session._howhap.errors, 'session is cleared').to.deep.equal({});
+		});
+		it('should call res.json if no redirect is supplied', function() {
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send();
 			expect(res.json.calledWith({
 				default: {
 					message: 'foo',
@@ -52,6 +80,32 @@ describe('howhap-middleware', function() {
 					params: {}
 				}
 			}), 'called with correct message').to.be.true;
+
+		});
+		it('should call res.redirect if a redirect is supplied', function() {
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send('/login');
+			expect(res.redirect.calledWith('/login'), 'called with correct message').to.be.true;
+		});
+		it('should properly set the session if a redirect is supplied', function() {
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send('/login');
+			expect(req.session._howhap.errors, 'errors on session').to.deep.equal({
+				default: {
+					message: 'foo',
+					status: 404,
+					params: {}
+				}
+			});
+			expect(req.session._howhap.data.body, 'body on session').to.deep.equal(req.body);
+			expect(req.session._howhap.data.query, 'query on session').to.deep.equal(req.query);
+			expect(req.session._howhap.data.params, 'params on session').to.deep.equal(req.params);
 		});
 	});
 });

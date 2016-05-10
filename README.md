@@ -91,6 +91,13 @@ router.post('/login', function(req, res, next) {
 		// There were no errors, redirect.
 		res.redirect('/dashboard');
 	}
+
+	// You can optionally send json data instead of redirecting
+	// by omitting the first argument of the send method. eg...
+	//
+	// if(!res.error.send()) {
+	// 	res.json(user);
+	// }
 });
 ```
 
