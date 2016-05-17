@@ -43,7 +43,7 @@ module.exports = function (options) {
 			logger: logger
 		});
 		res.error.send = function (redirect) {
-			var errors = res.error.toJSON();
+			var errors = res.error.toObject();
 			var status = null;
 			// Get the status of the "first" error in the object
 			for (var prop in errors) {
