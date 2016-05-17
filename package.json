@@ -1,6 +1,6 @@
 {
   "name": "howhap-middleware",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Easily integrate howhap errors into your express app.",
   "main": "dist/index.js",
   "scripts": {
