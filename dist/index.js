@@ -2,19 +2,22 @@
 
 var HowhapList = require('howhap-list');
 var _ = require('lodash');
-var bunyan = require('bunyan');
+var winston = require('winston');
 module.exports = function (options) {
 	var defaults = {
 		availableErrors: {},
 		logging: {
-			name: 'howhap-middleware',
-			stream: process.stdout,
-			level: 'warn'
+			level: 'info',
+			transports: [new winston.transports.Console({
+				handleExceptions: true,
+				humanReadableUnhandledException: true
+			})]
 		}
 	};
 	options = options || {};
 	options = _.extend(defaults, options);
-	var logger = bunyan.createLogger(options.logging);
+
+	var logger = new winston.Logger(options.logging);
 	return function (req, res, next) {
 		var defaults = {
 			errors: {},

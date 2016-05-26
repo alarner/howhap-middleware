@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/alarner/howhap-middleware#readme",
   "dependencies": {
-    "bunyan": "^1.8.1",
     "howhap": "^2.0.3",
     "howhap-list": "^2.0.1",
-    "lodash": "^4.12.0"
+    "lodash": "^4.12.0",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "async": "^2.0.0-rc.4",
