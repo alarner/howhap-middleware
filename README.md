@@ -87,9 +87,17 @@ router.post('/login', function(req, res, next) {
 	// The send method will return false if there are no errors
 	// to send. The send method takes a optional second argument
 	// specifying the response format you would like ('html' or
-	// 'json'). If there is no response format specified, it
-	// will fallback to the 'defaultFormat' option passed in to
-	// the middleware. If the format is 'html' the user will be
+	// 'json'). The format will be resolved in the following
+	// order:
+	//
+	// 1. The second argument of res.error.send
+	// 2. If (1) not specified then the responseFormat query
+	//    parameter
+	// 3. If (2) not specified then the defaultFormat middleware
+	//    option
+	// 4. If (3) not specified then 'json'
+	//
+	// If the resolved format is 'html' the user will be
 	// redirected to the specified redirect. Otherwise json will
 	// be returned.
 	if(!res.error.send('/login', 'html')) {

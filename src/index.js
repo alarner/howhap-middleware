@@ -49,6 +49,9 @@ module.exports = function(options) {
 		res.error.send = function(redirect, format) {
 			let errors = res.error.toObject();
 			let status = null;
+			if(!format && req.query) {
+				format = req.query.responseFormat;
+			}
 			format = format || options.defaultFormat;
 			format = format.toString().toLowerCase();
 			redirect = redirect || req.get('Referer') || '/';

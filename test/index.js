@@ -147,5 +147,17 @@ describe('howhap-middleware', function() {
 			res.error.send();
 			expect(res.redirect.calledWith('/'), 'called with correct message').to.be.true;
 		});
+		it('should respect the query responseFormat query param over the defaultFormat middleware option', function() {
+			middlewareFunction = HowhapMiddleware({ defaultFormat: 'html' });
+			middlewareFunction(req, res, () => {});
+			req.get = sinon.stub().returns('');
+			req.query.responseFormat = 'json';
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send();
+			expect(res.redirect.calledWith('/'), 'called with correct message').to.be.false;
+		});
 	});
 });
