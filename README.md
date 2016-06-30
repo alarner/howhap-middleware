@@ -30,6 +30,8 @@ let options = {
 			}
 		}
 	},
+	defaultFormat: 'json',	// If no response format is supplied,
+							// responses will be in this format.
 	logging: {
 		// options for winston loggin go here
 	}
@@ -37,10 +39,10 @@ let options = {
 
 let app = express();
 
-// Pass in the preset list of errors and an array of status
-// codes that you would like to trigger an error log entry
-// on the server. Alternatively you can pass in nothing.
-app.use(howhap({availableErrors: errors, logCodes: [500]}));
+// Pass in the option argument to customize the behavior 
+// of the middleware. Alternatively you can pass in nothing
+// and use the default behavior.
+app.use(howhap(options));
 
 ```
 
@@ -80,22 +82,24 @@ router.post('/login', function(req, res, next) {
 	// Other code goes here...
 
 	// Send the errors and redirect back to the login page.
-	// If no argument is passed to the send method then you
-	// will redirect back to the referer. The send method
-	// will return false if there are no errors to send.
-	// The send method is smart about what "sending" actually
-	// means. If the request does not accept HTML then
-	// instead of being redirected, the errors will be sent
-	// back via JSON with the appropriate status code.
-	if(!res.error.send('/login')) {
+	// If no argument is passed to the first argument of the
+	// send method then you will redirect back to the referer.
+	// The send method will return false if there are no errors
+	// to send. The send method takes a optional second argument
+	// specifying the response format you would like ('html' or
+	// 'json'). If there is no response format specified, it
+	// will fallback to the 'defaultFormat' option passed in to
+	// the middleware. If the format is 'html' the user will be
+	// redirected to the specified redirect. Otherwise json will
+	// be returned.
+	if(!res.error.send('/login', 'html')) {
 		// There were no errors, redirect.
 		res.redirect('/dashboard');
 	}
 
-	// You can optionally send json data instead of redirecting
-	// by omitting the first argument of the send method. eg...
+	// Here's an example of sending json
 	//
-	// if(!res.error.send()) {
+	// if(!res.error.send(null, 'json')) {
 	// 	res.json(user);
 	// }
 });

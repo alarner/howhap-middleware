@@ -4,6 +4,7 @@ let winston = require('winston');
 module.exports = function(options) {
 	let defaults = {
 		availableErrors: {},
+		defaultFormat: 'json',
 		logging: {
 			level: 'info',
 			transports: [
@@ -45,9 +46,13 @@ module.exports = function(options) {
 			availableErrors: options.availableErrors,
 			logger: logger
 		});
-		res.error.send = function(redirect) {
+		res.error.send = function(redirect, format) {
 			let errors = res.error.toObject();
 			let status = null;
+			format = format || options.defaultFormat;
+			format = format.toString().toLowerCase();
+			redirect = redirect || req.get('Referer') || '/';
+
 			// Get the status of the "first" error in the object
 			for(let prop in errors) {
 				status = errors[prop].status;
@@ -57,14 +62,14 @@ module.exports = function(options) {
 				return false;
 			}
 
-			if(redirect) {
+			if(format === 'html') {
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
 				req.session._howhap.data.query = req.query;
 				req.session._howhap.data.params = req.params;
 				res.redirect(redirect);
 			}
-			else {
+			else if(format === 'json') {
 				res.status(status).json(errors);
 			}
 			return true;

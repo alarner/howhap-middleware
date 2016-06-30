@@ -35,7 +35,8 @@ describe('howhap-middleware', function() {
 				},
 				params: {
 					id: 7
-				}
+				},
+				get: sinon.stub().returns('http://foo-bar.baz')
 			};
 			res = {
 				locals: {}
@@ -82,12 +83,20 @@ describe('howhap-middleware', function() {
 			}), 'called with correct message').to.be.true;
 
 		});
-		it('should call res.redirect if a redirect is supplied', function() {
+		it('should not call res.redirect if the format is not html', function() {
 			res.error.add({
 				message: 'foo',
 				status: 404
 			});
 			res.error.send('/login');
+			expect(res.redirect.calledWith('/login'), 'called with correct message').to.be.false;
+		});
+		it('should call res.redirect if the format is html', function() {
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send('/login', 'html');
 			expect(res.redirect.calledWith('/login'), 'called with correct message').to.be.true;
 		});
 		it('should properly set the session if a redirect is supplied', function() {
@@ -95,7 +104,7 @@ describe('howhap-middleware', function() {
 				message: 'foo',
 				status: 404
 			});
-			res.error.send('/login');
+			res.error.send('/login', 'html');
 			expect(req.session._howhap.errors, 'errors on session').to.deep.equal({
 				default: {
 					message: 'foo',
@@ -106,6 +115,37 @@ describe('howhap-middleware', function() {
 			expect(req.session._howhap.data.body, 'body on session').to.deep.equal(req.body);
 			expect(req.session._howhap.data.query, 'query on session').to.deep.equal(req.query);
 			expect(req.session._howhap.data.params, 'params on session').to.deep.equal(req.params);
+		});
+		it('should respect the defaultFormat option', function() {
+			middlewareFunction = HowhapMiddleware({ defaultFormat: 'html' });
+			middlewareFunction(req, res, () => {});
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send('/login');
+			expect(res.redirect.calledWith('/login'), 'called with correct message').to.be.true;
+		});
+		it('should use the referrer if no redirect url is specified', function() {
+			middlewareFunction = HowhapMiddleware({ defaultFormat: 'html' });
+			middlewareFunction(req, res, () => {});
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send();
+			expect(res.redirect.calledWith('http://foo-bar.baz'), 'called with correct message').to.be.true;
+		});
+		it('should redirect to / if no redirect url or referrer is specified', function() {
+			middlewareFunction = HowhapMiddleware({ defaultFormat: 'html' });
+			middlewareFunction(req, res, () => {});
+			req.get = sinon.stub().returns('');
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send();
+			expect(res.redirect.calledWith('/'), 'called with correct message').to.be.true;
 		});
 	});
 });
