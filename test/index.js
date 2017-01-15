@@ -4,7 +4,7 @@ let HowhapMiddleware = require('../src/index.js');
 describe('howhap-middleware', function() {
 	describe('middleware', function() {
 		let middlewareFunction = HowhapMiddleware();
-		it('should return an error if no session is defined', function() {
+		it('should not return an error if session is undefined but not necessary', function() {
 			let req = {
 				// session: {},
 			};
@@ -14,8 +14,8 @@ describe('howhap-middleware', function() {
 			res.end = sinon.stub().returns(res);
 			res.status = sinon.stub().returns(res);
 			middlewareFunction(req, res, () => {});
-			expect(res.status.calledWith(500)).to.be.true;
-			expect(res.end.calledWith('howhap-middleware requires an express session.')).to.be.true;
+			expect(res.status.calledWith(500)).to.be.false;
+			expect(res.end.calledWith('howhap-middleware requires an express session.')).to.be.false;
 		});
 	});
 	describe('res.send', function() {
@@ -98,6 +98,16 @@ describe('howhap-middleware', function() {
 			});
 			res.error.send('/login', 'html');
 			expect(res.redirect.calledWith('/login'), 'called with correct message').to.be.true;
+		});
+		it('should return an error if session is undefined and necessary', function() {
+			delete req.session;
+			res.error.add({
+				message: 'foo',
+				status: 404
+			});
+			res.error.send('/login', 'html');
+			expect(res.status.calledWith(500)).to.be.true;
+			expect(res.end.calledWith('howhap-middleware requires an express session.')).to.be.true;
 		});
 		it('should properly set the session if a redirect is supplied', function() {
 			res.error.add({

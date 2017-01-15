@@ -28,19 +28,18 @@ module.exports = function(options) {
 				params: {}
 			}
 		};
-		if(!req.session) {
-			return res.status(500).end('howhap-middleware requires an express session.');
-		}
-		let prevHowhap = req.session._howhap || _.cloneDeep(defaults);
-		req.session._howhap = _.cloneDeep(defaults);
+		if(req.session) {
+			let prevHowhap = req.session._howhap || _.cloneDeep(defaults);
+			req.session._howhap = _.cloneDeep(defaults);
 
-		res.locals.error = new HowhapList(prevHowhap.errors);
-		res.locals.prev = {
-			display: function(type, key, defaultValue) {
-				defaultValue = defaultValue || '';
-				return prevHowhap.data[type.toLowerCase()][key] || defaultValue;
-			}
-		};
+			res.locals.error = new HowhapList(prevHowhap.errors);
+			res.locals.prev = {
+				display: function(type, key, defaultValue) {
+					defaultValue = defaultValue || '';
+					return prevHowhap.data[type.toLowerCase()][key] || defaultValue;
+				}
+			};
+		}
 		
 		res.error = new HowhapList(null, {
 			availableErrors: options.availableErrors,
@@ -66,6 +65,9 @@ module.exports = function(options) {
 			}
 
 			if(format === 'html') {
+				if(!req.session) {
+					return res.status(500).end('howhap-middleware requires an express session.');
+				}
 				req.session._howhap.errors = errors;
 				req.session._howhap.data.body = req.body;
 				req.session._howhap.data.query = req.query;
